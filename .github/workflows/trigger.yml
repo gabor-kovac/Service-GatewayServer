@@ -1,0 +1,25 @@
+name: Trigger dispatch
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - release
+  pull_request:
+    types: [opened, closed, synchronize]
+    branches-ignore:
+      - versioning
+  delete:
+    branches:
+      - '*'
+  gollum:
+
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  Trigger_Dispatch:
+    uses: gabor-kovac/workflow/.github/workflows/dispatch.yml@main
+    with:
+      trigger: ${{ github.event_name }}
+    secrets: inherit
